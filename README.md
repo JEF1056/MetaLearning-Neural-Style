@@ -81,7 +81,7 @@ Download the Metalearned pretrained files here:
 All models were tested on a Tesla T4 GPU, with a 1920x1080x3 content image and a 1024x1024x3 style image. <br>
 [Train_8](https://drive.google.com/file/d/1DxTIo8wVLTjEPLrin00ifgOSbr5HKBwK/view?usp=sharing)  creates model files of about 447kb, and can be evaluated in 0.23 seconds, and a video speed of 4.62 frames/second.<br>
 [Train_32](https://drive.google.com/file/d/1jI07ubQBsudvcDV8hNXM5L8n_Oog0dsc/view?usp=sharing) creates model files of about 7mb, and can be evaluated in 0.56 seconds, and a video speed of 3.02 frames/second.<br>
-Both models will use ~11.56gb of vram with the size of the style and content images, which is directly propotional with the size of the images.<br>
+Both models will use ~11.56gb of vram, which scales with style image size<br>Speed scales inversely with content image size.
 
 ## Usage
 Usage is simple, and should take no more than running a single command. **Model number should correlate with the same prototxt folder number.**
