@@ -73,15 +73,11 @@ def pycaffe_predict(im):
 	#t2=time.time()
 	#print(t2-t1)
 	
-	
-	
 	raw_score = score[0]
-	
 	
 	raw_score = raw_score[0,:,:,:]
 	
 	raw_score = np.transpose(raw_score,(1,2,0)).copy()
-	
 	
 	raw_score[:,:,0] = raw_score[:,:,0] + 104.008
 	raw_score[:,:,1] = raw_score[:,:,1] + 116.669
@@ -101,21 +97,30 @@ def build_parser():
 			    metavar='MODEL_PROTO', required=True)
 	parser.add_argument('--content', type=str,
 			    dest='content', help='dir to find content image/video',
-			    metavar='CONTENT_LOC', required=True)
+			    metavar='CONTENT_LOC')
 	parser.add_argument('--style', type=str,
 			    dest='style', help='dir to find style image',
 			    metavar='STYLE_LOC', required=True)
 	parser.add_argument('--out', type=str,
 			    dest='out', help='dir to save output',
-			    metavar='OUT_LOC', required=True)
+			    metavar='OUT_LOC')
 	parser.add_argument('--oc', dest='oc', help='original colors',
 			    action='store_true')
 	parser.add_argument('--cct', type=str,
 			    dest='cct', help='Convert color type, of options yuv, lab, luv, and ycrcb', 
 			    default="yuv")
+	parser.add_argument('--cr', type=float,
+			    dest='cr', help='content ratio', 
+			    default=1)
+	parser.add_argument('--sr', type=float,
+			    dest='sr', help='style ratio', 
+			    default=1)			
 	parser.add_argument('--video', dest='video', help='uwu for those video fans', 
 			    action='store_true')
-	parser.set_defaults(gpu=False, video=False, oc=False)
+	parser.add_argument('--realtime', dest='realtime', help='UWU IS THAT REALTIME?!?!', 
+			    action='store_true')
+	parser.add_argument('--camera', type=int, dest='camera', help='OMG A CAMERA OWO')
+	parser.set_defaults(gpu=False, video=False, oc=False, realtime=False, camera=0)
 	return parser
 	
 	
@@ -129,10 +134,15 @@ if __name__ == '__main__':
 	caffe.base_model(options.model, 'base.txt')
 
 	style_im = imread(options.style)
-	#style_im = resize(style_im,(256,256))
+	style_im = cv2.resize(style_im, (0,0), fx=options.sr, fy=options.sr)
+	print("Style size: " + str(style_im.shape))
 	hidden_feat = pycaffe_hidden(style_im)
 	
 	pycaffe_param(hidden_feat)
+	
+	if options.video == True and options.realtime == True:
+		print("Cannot have both video and realtime active at the same time")
+		end
 	
 	if options.video:
 		try:
@@ -150,14 +160,16 @@ if __name__ == '__main__':
 		video_length = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
 		print("Found " + str(video_length) + " frames")
 		height, width, layers = image.shape
-		fourcc = cv2.VideoWriter_fourcc(*'XVID')
+		fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 		video = cv2.VideoWriter("recon/NOAUD.avi", fourcc, fps, (width,height))
 
 		i = 0
 		pbar = tqdm(total=video_length)
 		while(vidcap.isOpened()) and success == True and i < video_length:
 			if success==True:
-				origin_im = image
+				origin_im = cv2.resize(image, (0,0), fx=options.cr, fy=options.cr) 
+				if i == 0:
+					print("Content size: " + str(origin_im.shape))
 				scoremap = pycaffe_predict(origin_im)
 				if options.oc:
 					if options.cct == 'yuv':
@@ -172,7 +184,7 @@ if __name__ == '__main__':
 					elif options.cct == 'lab':
 					  cvt_type = cv2.COLOR_BGR2LAB
 					  inv_cvt_type = cv2.COLOR_LAB2BGR
-					content_cvt = cv2.cvtColor(image, cvt_type)
+					content_cvt = cv2.cvtColor(origin_im, cvt_type)
 					stylized_cvt = cv2.cvtColor(scoremap, cvt_type)
 					c1, _, _ = cv2.split(stylized_cvt)
 					_, c2, c3 = cv2.split(content_cvt)
@@ -191,8 +203,52 @@ if __name__ == '__main__':
 		#Extract audio
 		subprocess.call(['ffmpeg', '-i', options.content, '-f', 'mp3', '-ab', '192000', '-vn', 'recon/v_aud.mp3'])
 		subprocess.call(['ffmpeg', '-i', "recon/NOAUD.avi", '-i', 'recon/v_aud.mp3', '-vcodec', 'x265', '-crf', '24', '-map', '0:0', '-map', '1:0', '-c:v', 'copy', '-c:a', 'copy', options.out])	
+	if options.realtime:
+		vidcap = cv2.VideoCapture(options.camera)
+		(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
+		
+		fpscount=0
+		t1 = time.time()
+		while(True):
+			success,image = vidcap.read()
+			origin_im = cv2.resize(image, (0,0), fx=options.cr, fy=options.cr) 
+			if fpscount == 0:
+				print("Content size: " + str(origin_im.shape))
+			scoremap = pycaffe_predict(origin_im)
+			if options.oc:
+				if options.cct == 'yuv':
+				  cvt_type = cv2.COLOR_BGR2YUV
+				  inv_cvt_type = cv2.COLOR_YUV2BGR
+				elif options.cct == 'ycrcb':
+				  cvt_type = cv2.COLOR_BGR2YCR_CB
+				  inv_cvt_type = cv2.COLOR_YCR_CB2BGR
+				elif options.cct == 'luv':
+				  cvt_type = cv2.COLOR_BGR2LUV
+				  inv_cvt_type = cv2.COLOR_LUV2BGR
+				elif options.cct == 'lab':
+				  cvt_type = cv2.COLOR_BGR2LAB
+				  inv_cvt_type = cv2.COLOR_LAB2BGR
+				content_cvt = cv2.cvtColor(origin_im, cvt_type)
+				stylized_cvt = cv2.cvtColor(scoremap, cvt_type)
+				c1, _, _ = cv2.split(stylized_cvt)
+				_, c2, c3 = cv2.split(content_cvt)
+				merged = cv2.merge((c1, c2, c3))
+				scoremap = cv2.cvtColor(merged, inv_cvt_type).astype(np.float32)
+			t2 = time.time()
+			fpscount=fpscount+1
+			fps = (fpscount/(t2-t1))
+			font = cv2.FONT_HERSHEY_SIMPLEX
+			withfps = cv2.putText(cv2.resize(np.uint8(scoremap), (0,0), fx=1.5, fy=1.5),str(round(fps,2))+" fps",(10,40), font, 1,(255,255,255),2,cv2.LINE_AA)
+			cv2.imshow('frame', withfps)
+			if cv2.waitKey(1) & 0xFF == ord('q'):
+				break
+			
+		vidcap.release()
+		cv2.destroyAllWindows()
 	else:
-		origin_im = cv2.imread(options.content)
+		origin_im = cv2.resize(cv2.imread(options.content), (0,0), fx=options.cr, fy=options.cr) 
+		if i == 0:
+			print("Content size: " + str(origin_im.shape))
 		t1=time.time()
 		scoremap = pycaffe_predict(origin_im)
 		if options.oc:
@@ -219,4 +275,3 @@ if __name__ == '__main__':
 			imwrite(options.out,scoremap)
 		print("Took " + str(round((time.time()-t1),2)) + " seconds")
 	print("DONE")
-
