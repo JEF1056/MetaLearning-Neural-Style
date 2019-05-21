@@ -13,6 +13,7 @@ sudo install_deps.sh
 It will install all dependencies and the reopsitory, along with building the repository. For any issues compiling, try checking out how to do so manually below.
 <details><summary>Detailed/Manual install</summary>
 <p>
+
 Make sure CAFFE dependencies (listed below) are installed using `sudo apt-get` or equivalent method on your distributuion of linux
 ```
 libopenblas-dev 
@@ -74,6 +75,7 @@ If the build succeds, then the rest of the code can be done on python. <br>
 Download the Metalearned pretrained files here:
 [Train_8](https://drive.google.com/file/d/1DxTIo8wVLTjEPLrin00ifgOSbr5HKBwK/view?usp=sharing) 
 [Train_32](https://drive.google.com/file/d/1jI07ubQBsudvcDV8hNXM5L8n_Oog0dsc/view?usp=sharing)
+
 </p>
 </details>
 
