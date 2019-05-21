@@ -86,7 +86,7 @@ All models were tested on a Tesla T4 GPU, with a 1920x1080x3 content image and a
 Both models will use ~11.56gb of vram, which scales with style image size<br>Speed scales inversely with content image size.
 
 ## Usage
-Usage is simple, and should take no more than running a single command. **Model number should correlate with the same prototxt folder number.**
+Usage is simple, and should take no more than running a single command. This is an overview of all the commands. Individual (basic) examples can be seen below.
 ```
 python3 demo.py \
   --model "train_32.caffemodel" \
@@ -96,7 +96,56 @@ python3 demo.py \
   --out "{OUTPUT LOCATION}.jpg" \
   --cr {CONTENT RESIZE RATIO} \
   --sr {STYLE RESIZE RATIO} \
-  --oc \ (for origianl colors)
+  --oc \ (for original colors)
   --video (for if your file is a video)
   --realtime (for realtime camera styling)
 ```
+<details><summary>Image</summary>
+<p>
+  
+```
+python3 demo.py \
+  --content "{CONTENT LOCATION}.jpg" \
+  --style "{STYLE LOCATION}.jpg" \
+  --out "{OUTPUT LOCATION}.jpg"
+```
+
+</p>
+</details>
+<details><summary>Video</summary>
+<p>
+  
+```
+python3 demo.py \
+  --content "{CONTENT LOCATION}.mp4" \
+  --style "{STYLE LOCATION}.jpg" \
+  --out "{OUTPUT LOCATION}.mp4" \
+  --video
+```
+
+</p>
+</details>
+<details><summary>Realtime</summary>
+<p>
+  
+```
+python3 demo.py \
+  --style "{STYLE LOCATION}.jpg" \
+  --realtime
+```
+
+</p>
+</details>
+<details><summary>Evaluate only</summary>
+<p>
+  
+```
+python3 demo.py \
+  --model "{PATH TO PROTOTXT}.caffemodel" \
+  --prototxt "{PATH TO PROTOTXT}" \
+  --content "{CONTENT LOCATION}.jpg" \
+  --evaluate
+```
+
+</p>
+</details>
