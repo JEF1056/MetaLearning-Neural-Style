@@ -139,10 +139,11 @@ python3 demo.py \
 <details><summary>Evaluate only</summary>
 <p>
   
+Evaluate works with realtime, image and video, and can help reduce initial RAM requirements by skipping the training steps.  
 ```
 python3 demo.py \
-  --model "{PATH TO PREDICT}.caffemodel" \
-  --prototxt "{PATH TO PREDICT}" \
+  --model "{PATH TO PRE-TRAINED}" \
+  --prototxt "{PROTOTXT MODEL TYPE (8 or 32)}" \
   --content "{CONTENT LOCATION}.jpg" \
   --evaluate
 ```
