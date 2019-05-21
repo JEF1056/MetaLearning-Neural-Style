@@ -5,6 +5,14 @@ This is Version 2 of the original [Reconstruction-Style](https://github.com/JEF1
 ***There currently is no method to build on Windows, it will be added in the future***
 
 ## To Build on Linux
+Download only `install_deps.sh` to any folder, and then run
+```
+sudo chmod +x install_deps.sh
+sudo install_deps.sh
+```
+It will install all dependencies and the reopsitory, along with building the repository. For any issues compiling, try checking out how to do so manually below.
+<details><summary>Detailed/Manual install</summary>
+<p>
 Make sure CAFFE dependencies (listed below) are installed using `sudo apt-get` or equivalent method on your distributuion of linux
 ```
 libopenblas-dev 
@@ -23,25 +31,39 @@ python-numpy
 python-opencv 
 libmpich-dev 
 ```
-then run (just in case)
+then run
 ```
 sudo apt-get update 
 sudo apt-get install -y $buildDeps 
 ```
 
 Next, install CUDA, NCCL, and CUDNN
-(below is the code to install NCCL, the rest are typically pre-installed on systems with NVidia cards)
+Install CUDA
+```
+sudo apt-get install cuda
+```
+**DON'T FORGET TO SET LD_LIBRRY_PATH and PATH** <br>
+Install CUDNN
+download .deb package from the [official site](https://developer.nvidia.com/rdp/cudnn-download)
+```
+sudo dpkg -i {PATH TO CUDNN .deb LOCATION}
+```
+Install NCCL
 ```
 wget http://github.com/NVIDIA/nccl/archive/master.zip 
 unzip master.zip 
 cd nccl-master 
-make CUDA10_GENCODE="-gencode=arch=compute_35,code=sm_35 -gencode=arch=compute_50,code=sm_50 -gencode=arch=compute_60,code=sm_60 -gencode=arch=compute_61,code=sm_61"
+make
 make install
+rm master.zip
+rm -rf nccl
+rm -r nccl-master
 ```
 
 Finally, build the repo using the makefile
 ```
-git clone https://github.com/JEF1056/styletransfer.git
+git clone https://github.com/JEF1056/MetaLearning-Neural-Style.git
+mv MetaLearning-Neural-Style styletransfer
 rm -r styletransfer/build
 cd styletransfer
 make 
@@ -52,6 +74,8 @@ If the build succeds, then the rest of the code can be done on python. <br>
 Download the Metalearned pretrained files here:
 [Train_8](https://drive.google.com/file/d/1DxTIo8wVLTjEPLrin00ifgOSbr5HKBwK/view?usp=sharing) 
 [Train_32](https://drive.google.com/file/d/1jI07ubQBsudvcDV8hNXM5L8n_Oog0dsc/view?usp=sharing)
+</p>
+</details>
 
 ## Testing Results
 All models were tested on a Tesla T4 GPU, with a 1920x1080x3 content image and a 1024x1024x3 style image. <br>
@@ -68,6 +92,9 @@ python3 demo.py \
   --content "{CONTENT LOCATION}.jpg" \
   --style "{STYLE LOCATION}.jpg" \
   --out "{OUTPUT LOCATION}.jpg" \
+  --cr {CONTENT RESIZE RATIO} \
+  --sr {STYLE RESIZE RATIO} \
   --oc \ (for origianl colors)
   --video (for if your file is a video)
+  --realtime (for realtime camera styling)
 ```
