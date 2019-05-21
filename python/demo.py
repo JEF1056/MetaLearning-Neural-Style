@@ -16,7 +16,6 @@ MODEL_PROTO = "prototxt/8/"
 CONTENT_LOC = "/content/drive/My Drive/IMP_STYLE/image2.jpg"
 STYLE_LOC = "/content/drive/My Drive/IMP_STYLE/1_zToNBcKp1777KbT4WtvnkA.jpeg"
 OUT_LOC = "/content/drive/My Drive/IMP_STYLE/out.jpg"
-EVAL = False
 
 def pycaffe_hidden(im_label):
 	prototxt_file = MODEL_PROTO+'hidden.prototxt'
@@ -55,12 +54,9 @@ def pycaffe_param(hidden_feat):
 	caffe.save_model(param,'layer_name.txt','base.caffemodel','predict.caffemodel')
 
 def pycaffe_predict(im):
-	if EVAL:
-		prototxt_file = MODEL_PROTO+'predict.prototxt'
-		weights_file = MODEL_LOC
-	else:
-		prototxt_file = MODEL_PROTO+'predict.prototxt'
-		weights_file = 'predict.caffemodel'
+	prototxt_file = MODEL_PROTO+'predict.prototxt'
+	weights_file = 'predict.caffemodel'
+
 	if caffe.is_initialized() < 3:
 		caffe.init(prototxt_file, weights_file)
 		caffe.set_device(0)
@@ -124,10 +120,8 @@ def build_parser():
 			    action='store_true')
 	parser.add_argument('--realtime', dest='realtime', help='UWU IS THAT REALTIME?!?!', 
 			    action='store_true')
-	parser.add_argument('--evaluate', dest='evaluate', help='use pretrained models', 
-			    action='store_true')
 	parser.add_argument('--camera', type=int, dest='camera', help='OMG A CAMERA OWO')
-	parser.set_defaults(gpu=False, video=False, oc=False, realtime=False, camera=0, evaluate=False)
+	parser.set_defaults(gpu=False, video=False, oc=False, realtime=False, camera=0)
 	return parser
 	
 	
@@ -137,17 +131,14 @@ if __name__ == '__main__':
 	
 	MODEL_LOC=options.model
 	MODEL_PROTO=options.prototxt
-	EVAL = options.evaluate
 	
-	if options.evaluate == False:
-		caffe.base_model(options.model, 'base.txt')
+	caffe.base_model(options.model, 'base.txt')
+	style_im = imread(options.style)
+	style_im = cv2.resize(style_im, (0,0), fx=options.sr, fy=options.sr)
+	print("Style size: " + str(style_im.shape))
+	hidden_feat = pycaffe_hidden(style_im)
 
-		style_im = imread(options.style)
-		style_im = cv2.resize(style_im, (0,0), fx=options.sr, fy=options.sr)
-		print("Style size: " + str(style_im.shape))
-		hidden_feat = pycaffe_hidden(style_im)
-
-		pycaffe_param(hidden_feat)
+	pycaffe_param(hidden_feat)
 	
 	if options.video == True and options.realtime == True:
 		print("Cannot have both video and realtime active at the same time")
