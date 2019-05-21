@@ -141,8 +141,8 @@ python3 demo.py \
   
 ```
 python3 demo.py \
-  --model "{PATH TO PROTOTXT}.caffemodel" \
-  --prototxt "{PATH TO PROTOTXT}" \
+  --model "{PATH TO PREDICT}.caffemodel" \
+  --prototxt "{PATH TO PREDICT}" \
   --content "{CONTENT LOCATION}.jpg" \
   --evaluate
 ```
