@@ -247,8 +247,7 @@ if __name__ == '__main__':
 		cv2.destroyAllWindows()
 	else:
 		origin_im = cv2.resize(cv2.imread(options.content), (0,0), fx=options.cr, fy=options.cr) 
-		if i == 0:
-			print("Content size: " + str(origin_im.shape))
+		print("Content size: " + str(origin_im.shape))
 		t1=time.time()
 		scoremap = pycaffe_predict(origin_im)
 		if options.oc:
