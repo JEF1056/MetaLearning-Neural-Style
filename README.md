@@ -86,6 +86,34 @@ All models were tested on a Tesla T4 GPU, with a 1920x1080x3 content image and a
 [Train_32](https://drive.google.com/file/d/1jI07ubQBsudvcDV8hNXM5L8n_Oog0dsc/view?usp=sharing) creates model files of about 7mb, and can be evaluated in 0.56 seconds, and a video speed of 3.02 frames/second.<br>
 Both models will use ~11.56gb of vram, which scales with style image size<br>Speed scales inversely with content image size.
 
+<details><summary>Comparison 1:</summary>
+<p>
+  
+SOURCE: [Fast-Style](https://github.com/jcjohnson/fast-neural-style)<br>
+LEFT: Style ||| RIGHT: Content<br>
+<img src="https://raw.githubusercontent.com/jcjohnson/neural-style/master/examples/inputs/starry_night_google.jpg" height="223px">
+<img src="https://raw.githubusercontent.com/jcjohnson/neural-style/master/examples/inputs/hoovertowernight.jpg" height="223px">
+<br>LEFT: Justin Johnson's implementation ||| RIGHT: This Implementation<br>
+<img src="https://raw.githubusercontent.com/jcjohnson/neural-style/master/examples/outputs/starry_stanford_bigger.png" width="355px">
+<img src="https://raw.githubusercontent.com/jcjohnson/neural-style/master/examples/outputs/starry_stanford_bigger.png" width="355px">
+
+</p>
+</details>
+
+<details><summary>Comaprison 2:</summary>
+<p>
+  
+SOURCE: [Arbitrary Style](https://github.com/jcjohnson/neural-style)<br>
+LEFT: Style ||| RIGHT: Content<br>
+<img src="https://raw.githubusercontent.com/jcjohnson/fast-neural-style/master/images/styles/candy.jpg" height="223px">
+<img src="https://raw.githubusercontent.com/jcjohnson/fast-neural-style/master/images/content/hoovertowernight.jpg" height="223px">
+<br>LEFT: Justin Johnson's implementation ||| RIGHT: This Implementation<br>
+<img src="https://raw.githubusercontent.com/jcjohnson/fast-neural-style/master/images/outputs/hoovertowernight_candy.jpg" width="355px">
+<img src="https://raw.githubusercontent.com/jcjohnson/fast-neural-style/master/images/outputs/hoovertowernight_candy.jpg" width="355px">
+
+</p>
+</details>
+
 ## Usage
 Usage is simple, and should take no more than running a single command. This is an overview of all the commands. Individual (basic) examples can be seen below.
 ```
@@ -133,20 +161,6 @@ python3 demo.py \
 python3 demo.py \
   --style "{STYLE LOCATION}.jpg" \
   --realtime
-```
-
-</p>
-</details>
-<details><summary>Evaluate only</summary>
-<p>
-  
-Evaluate works with realtime, image and video, and can help reduce initial RAM requirements by skipping the training steps.  
-```
-python3 demo.py \
-  --model "{PATH TO PRE-TRAINED}" \
-  --prototxt "{PROTOTXT MODEL TYPE (8 or 32)}" \
-  --content "{CONTENT LOCATION}.jpg" \
-  --evaluate
 ```
 
 </p>
