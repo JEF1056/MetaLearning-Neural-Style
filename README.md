@@ -78,6 +78,7 @@ Download the Metalearned pretrained files here:
 
 </p>
 </details>
+<br>
 
 ## Testing Results
 All models were tested on a Tesla T4 GPU, with a 1920x1080x3 content image and a 1024x1024x3 style image. <br>
