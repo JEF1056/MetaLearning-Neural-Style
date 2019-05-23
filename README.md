@@ -89,13 +89,13 @@ Both models will use ~11.56gb of vram, which scales with style image size<br>Spe
 <details><summary>Comparison 1:</summary>
 <p>
   
-SOURCE: [Fast-Style](https://github.com/jcjohnson/fast-neural-style)<br>
+SOURCE: [Arbitrary Style](https://github.com/jcjohnson/neural-style)<br>
 LEFT: Style ||| RIGHT: Content<br>
 <img src="https://raw.githubusercontent.com/jcjohnson/neural-style/master/examples/inputs/starry_night_google.jpg" height="223px">
 <img src="https://raw.githubusercontent.com/jcjohnson/neural-style/master/examples/inputs/hoovertowernight.jpg" height="223px">
 <br>LEFT: Justin Johnson's implementation ||| RIGHT: This Implementation<br>
 <img src="https://raw.githubusercontent.com/jcjohnson/neural-style/master/examples/outputs/starry_stanford_bigger.png" width="355px">
-<img src="https://raw.githubusercontent.com/jcjohnson/neural-style/master/examples/outputs/starry_stanford_bigger.png" width="355px">
+<img src="https://raw.githubusercontent.com/JEF1056/MetaLearning-Neural-Style/master/docs/htnight.jpg" width="355px">
 
 </p>
 </details>
@@ -103,13 +103,13 @@ LEFT: Style ||| RIGHT: Content<br>
 <details><summary>Comaprison 2:</summary>
 <p>
   
-SOURCE: [Arbitrary Style](https://github.com/jcjohnson/neural-style)<br>
+SOURCE: [Fast-Style](https://github.com/jcjohnson/fast-neural-style)<br>
 LEFT: Style ||| RIGHT: Content<br>
 <img src="https://raw.githubusercontent.com/jcjohnson/fast-neural-style/master/images/styles/candy.jpg" height="223px">
 <img src="https://raw.githubusercontent.com/jcjohnson/fast-neural-style/master/images/content/hoovertowernight.jpg" height="223px">
 <br>LEFT: Justin Johnson's implementation ||| RIGHT: This Implementation<br>
 <img src="https://raw.githubusercontent.com/jcjohnson/fast-neural-style/master/images/outputs/hoovertowernight_candy.jpg" width="355px">
-<img src="https://raw.githubusercontent.com/jcjohnson/fast-neural-style/master/images/outputs/hoovertowernight_candy.jpg" width="355px">
+<img src="https://raw.githubusercontent.com/JEF1056/MetaLearning-Neural-Style/master/docs/htcandy.jpg" width="355px">
 
 </p>
 </details>
